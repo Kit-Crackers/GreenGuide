@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GreenGuide</title>
+
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</head>
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar">
+  <div class="logo"><b>🌿 GreenGuide</b></div>
+
+  <ul class="nav-links">
+    <li><a href="/"><i class='bx bx-home'></i> Home</a></li>
+    <li><a href="/about"><i class='bx bx-info-circle'></i> About</a></li>
+    <li><a href="/search"><i class='bx bx-search'></i> Search</a></li>
+     <li class="nav-dropdown">
+      {% if user %}
+    <!-- USER LOGGED IN -->
+      <div class="user-icon">
+      <a href="#" class="btn-nav">
+        <i class='bx bx-user-circle'></i> user
+      </a>
+      <div class="dropdown-menu">
+        <a href="/account">👤 My Account</a>
+        <a href="/logout">🚪 Logout</a>
+      </div>
+      </div>
+      {% else %}
+    <!-- NOT LOGGED IN -->
+      <div class="user-icon">
+      <a href="#" class="btn-nav">
+       <i class='bx bx-user'></i> Login / Register
+      </a>
+
+    <div class="dropdown-menu">
+      <a href="#" onclick="openRegister()">📝 New User</a>
+      <a href="#" onclick="openLogin()">🔐 Existing User</a>
+    </div>
+    </div>
+  {% endif %}
+</li>
+
+  </ul>
+</nav>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-container">
+      {% for category, message in messages %}
+        <div class="flash-message">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div class="hero-left">
+    <span class="badge">
+      <i class='bx bx-leaf'></i> Smart Plant Companion
+    </span>
+
+    <h1>
+      Understand.<br>
+      Care.<br>
+      <span>Grow Plants Better.</span>
+    </h1>
+
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="scrollToWhy()">
+        Start Exploring
+      </button>
+      <button class="btn-secondary" onclick="window.location.href='/search'">
+        Search a Plant
+      </button>
+    </div>
+
+  <div class="hero-image">
+  <img src="{{ url_for('static', filename='img/c.jpg') }}" alt="Plant">
+</div>
+
+</section>
+
+<!-- ================= ABOUT SECTION ================= -->
+<section class="about-section">
+  <div class="about-grid">
+    
+    <!-- LEFT CONTENT -->
+    <div class="about-content">
+      <h2>About GreenGuide 🌱</h2>
+      <p>
+        GreenGuide is a smart plant care platform built to help people understand,
+        care for, and grow plants better — without confusion.
+      </p>
+      <p>
+        Many plants suffer not because of neglect, but because of incorrect care.
+        GreenGuide solves this by providing personalized care tips based on plant
+        type and condition.
+      </p>
+      <p>
+        Whether you're a beginner or a plant enthusiast, GreenGuide becomes your
+        reliable companion in building a healthier green space.
+      </p>
+    </div>
+
+    <!-- RIGHT IMAGE -->
+    <div class="about-image">
+      <img src="{{ url_for('static', filename='img/a.jpg') }}" alt="Plant care">
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= WHY REQUIRED SECTION ================= -->
+<section class="need-section">
+  <div class="need-grid">
+
+    <!-- LEFT IMAGE -->
+    <div class="need-image">
+      <img src="{{ url_for('static', filename='img/b.jpg') }}" alt="Why GreenGuide">
+    </div>
+
+    <!-- RIGHT CONTENT -->
+    <div class="need-content">
+      <h2>Why GreenGuide Is Needed 🌍</h2>
+
+      <ul class="need-list">
+        <li>
+          <strong>🌿 Plants are dying unnecessarily</strong><br>
+          Most people overwater, underwater, or place plants in wrong lighting.
+        </li>
+
+        <li>
+          <strong>📚 Information is scattered</strong><br>
+          Care tips are inconsistent across the internet and hard to trust.
+        </li>
+
+        <li>
+          <strong>🧠 No personalization</strong><br>
+          Every plant is different — generic advice doesn’t work.
+        </li>
+
+        <li>
+          <strong>🌱 Sustainable living matters</strong><br>
+          Healthy plants improve air quality and mental well-being.
+        </li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <p>© 2026 GreenGuide · Helping plants thrive 🌿</p>
+</footer>
+
+<!-- ================= AUTH MODALS ================= -->
+
+<!-- Overlay -->
+<div id="overlay" class="overlay" onclick="closeModal()" style="display:none;"></div>
+
+<!-- LOGIN FORM -->
+<div id="loginModal" class="auth-modal" style="display:none;">
+  <h2>Login</h2>
+
+  <form method="POST" action="/login">
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="password" name="password" placeholder="Password" required>
+
+    <button type="submit" class="btn-primary">Login</button>
+  </form>
+
+  <p>Don't have an account? 
+    <span onclick="switchToRegister()">Register</span>
+  </p>
+
+  <span class="close-btn" onclick="closeModal()">✖</span>
+</div>
+
+<!-- REGISTER FORM -->
+<div id="registerModal" class="auth-modal" style="display:none;">
+  <h2>Register</h2>
+
+  <form method="POST" action="/register">
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="password" name="password" placeholder="Password" required>
+
+    <button type="submit" class="btn-primary">Register</button>
+  </form>
+
+  <p>Already have an account? 
+    <span onclick="switchToLogin()">Login</span>
+  </p>
+
+  <span class="close-btn" onclick="closeModal()">✖</span>
+</div>
+
+</body>
+</html>

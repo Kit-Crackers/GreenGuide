@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{{ plant.name }} | GreenGuide</title>
+<!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #f4fbf6;
+  --primary: #184e77;
+  --accent: #52b69a;
+  --dark: #1b4332;
+  --muted: #6c8f7f;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Georgia, 'Times New Roman', serif;
+  background: var(--bg);
+  color: var(--dark);
+  line-height: 1.7;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;   /* FIX */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page {
+  flex: 1;
+}
+
+
+/* ensures footer spans full width */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+
+/* ================= NAVBAR ================= */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 60px;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+}
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--dark);
+  font-weight: 600;
+  position: relative;
+}
+
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  bottom: -6px;
+  left: 0;
+  transition: 0.3s;
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+.btn-nav {
+  background: var(--dark);
+  color: white !important;
+  padding: 10px 22px;
+  border-radius: 30px;
+  font-size: 14px;
+}
+
+.logo {
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+}
+
+.nav-dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+  min-width: 180px;
+  display: none;
+  overflow: hidden;
+  z-index: 200;
+}
+
+.nav-dropdown {
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 14px 18px;
+  text-decoration: none;
+  color: var(--dark);
+  font-weight: 600;
+}
+
+.dropdown-menu a:hover {
+  background: #e9f5ec;
+}
+
+.nav-dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+/* ================= AUTH MODALS ================= */
+
+/* DARK OVERLAY */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(6px);
+  z-index: 999;
+  display: none;
+}
+
+/* MODAL BOX */
+.auth-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  background: white;
+  padding: 40px 35px;
+  width: 360px;
+  border-radius: 22px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+  z-index: 1000;
+  display: none;
+  animation: popupFade 0.3s ease forwards;
+}
+
+/* ANIMATION */
+@keyframes popupFade {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -60%) scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* TITLE */
+.auth-modal h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 26px;
+}
+
+/* INPUTS */
+.auth-modal input {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 15px;
+  border-radius: 12px;
+  border: 1px solid #dce9e3;
+  font-size: 14px;
+  outline: none;
+  transition: 0.25s;
+}
+
+.auth-modal input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(82,182,154,0.2);
+}
+
+/* BUTTON */
+.auth-modal button {
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* TEXT BELOW FORM */
+.auth-modal p {
+  text-align: center;
+  font-size: 14px;
+  margin-top: 15px;
+  color: var(--muted);
+}
+
+.auth-modal span {
+  color: var(--primary);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.auth-modal span:hover {
+  text-decoration: underline;
+}
+
+/* CLOSE BUTTON */
+.close-btn {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  font-size: 18px;
+  cursor: pointer;
+  color: var(--muted);
+  transition: 0.2s;
+}
+
+.close-btn:hover {
+  color: var(--dark);
+}
+
+/* PRIMARY BUTTON */
+.auth-modal .btn-primary {
+  background: var(--dark);
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.auth-modal .btn-primary:hover {
+  background: var(--primary);
+  transform: translateY(-1px);
+}
+
+/* PAGE */
+.page {
+  max-width: 1100px;
+  margin: 70px auto;
+  padding: 0 20px;
+}
+
+/* PLANT CARD */
+.plant-card {
+  background: white;
+  border-radius: 22px;
+  display: grid;
+  grid-template-columns: 40% 60%;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+}
+
+.plant-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.plant-info {
+  padding: 40px;
+}
+
+.plant-info h1 {
+  font-size: 34px;
+  margin-bottom: 12px;
+}
+
+.summary {
+  color: var(--muted);
+  margin-bottom: 25px;
+}
+
+.care-list {
+  list-style: none;
+}
+
+.care-list li {
+  padding: 10px 0;
+  border-bottom: 1px solid #eef3f0;
+}
+
+/* PERSONALIZED CARE */
+.personalized {
+  margin-top: 60px;
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.06);
+}
+
+.personalized h2 {
+  margin-bottom: 10px;
+}
+
+.personalized p {
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+/* IMAGE UPLOAD ZONE */
+.upload-box {
+  border: 2px dashed #cfe7dc;
+  border-radius: 18px;
+  padding: 45px 20px;
+  text-align: center;
+  cursor: pointer;
+  background: #fbfefd;
+  transition: all 0.3s ease;
+  margin-bottom: 30px;
+}
+
+.upload-box:hover {
+  background: #f1faf6;
+  border-color: var(--accent);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.05);
+}
+
+.upload-content h4 {
+  margin-top: 10px;
+  font-size: 18px;
+}
+
+.upload-content p {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.upload-icon {
+  font-size: 38px;
+  display: inline-block;
+  margin-bottom: 6px;
+}
+
+/* IMAGE PREVIEW */
+#previewImage {
+  display: none;
+  width: 100%;
+  max-height: 280px;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+input[type="file"] {
+  margin-bottom: 20px;
+}
+
+.symptoms {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.symptoms label {
+  background: #f1faf6;
+  padding: 12px 15px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.actions {
+  margin-top: 30px;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.actions form {
+  margin: 0;
+}
+
+.btn {
+  padding: 14px 28px;
+  border-radius: 30px;
+  border: none;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+/* PRIMARY BUTTON */
+.btn-primary {
+  background: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #3fa38a;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(82,182,154,0.4);
+}
+
+.btn-primary:active {
+  transform: scale(0.96);
+}
+
+/* OUTLINE BUTTON */
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--dark);
+  color: var(--dark);
+}
+
+.btn-outline:hover {
+  background: var(--dark);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+}
+
+.btn-outline:active {
+  transform: scale(0.96);
+}
+
+/* ================= PREDICTION RESULT ================= */
+
+/* Prediction Card */
+.prediction-card {
+  margin-top: 40px;
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+}
+
+.result-header {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.result-box {
+  flex: 1;
+  min-width: 200px;
+  background: #f1faf6;
+  padding: 20px;
+  border-radius: 15px;
+}
+
+.care-section h3 {
+  margin-bottom: 10px;
+}
+
+.care-desc {
+  color: var(--muted);
+  margin-bottom: 25px;
+}
+
+/* Row format */
+.care-block {
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eef3f0;
+}
+
+.care-block h4 {
+  margin-bottom: 10px;
+  color: var(--dark);
+}
+
+.care-block ul {
+  padding-left: 20px;
+}
+
+.care-block li {
+  margin-bottom: 6px;
+}
+ /*footer*/
+.footer {
+  width: 100vw;
+  background: var(--dark);
+  color: white;
+  text-align: center;
+  padding: 35px 0;
+  margin-top: 80px;
+  font-size: 14px;
+
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+
+</style>
+</head>
+
+<body>
+
+<nav class="navbar">
+  <div class="logo">🌿 GreenGuide</div>
+  <ul class="nav-links">
+     <li><a href="/"><i class='bx bx-home'></i> Home</a></li>
+    <li><a href="/about"><i class='bx bx-info-circle'></i> About</a></li>
+    <li><a href="/search"><i class='bx bx-search'></i> Search</a></li>
+    <li class="nav-dropdown">
+      {% if user %}
+    <!-- USER LOGGED IN -->
+      <div class="user-icon">
+      <a href="#" class="btn-nav">
+        <i class='bx bx-user-circle'></i> user
+      </a>
+      <div class="dropdown-menu">
+        <a href="/account">👤 My Account</a>
+        <a href="/logout">🚪 Logout</a>
+      </div>
+      </div>
+      {% else %}
+    <!-- NOT LOGGED IN -->
+      <div class="user-icon">
+      <a href="#" class="btn-nav">
+       <i class='bx bx-user'></i> Login / Register
+      </a>
+
+    <div class="dropdown-menu">
+      <a href="#" onclick="openRegister()">📝 New User</a>
+      <a href="#" onclick="openLogin()">🔐 Existing User</a>
+    </div>
+    </div>
+  {% endif %}
+  </li>
+
+  </ul>
+</nav>
+
+<div class="page">
+
+  <!-- PLANT CARD -->
+  <div class="plant-card">
+    <div class="plant-image">
+    
+      <img src="{{ plant_image }}" width="300">
+    </div>
+
+    <div class="plant-info">
+      <h1>{{ plant.name }}</h1>
+
+      <p class="summary">
+        {{ plant.name }} is a commonly grown plant known for its adaptability and ease of care.
+        With proper sunlight, watering, and soil conditions, it can thrive beautifully.
+      </p>
+
+      <ul class="care-list">
+        <li><b>🌱 Growth:</b> {{ plant.growth }}</li>
+        <li><b>🌞 Sunlight:</b> {{ plant.sunlight }}</li>
+        <li><b>💧 Watering:</b> {{ plant.watering }}</li>
+        <li><b>🪴 Soil:</b> {{ plant.soil }}</li>
+        <li><b>🧪 Fertilization:</b> {{ plant.fertilization }}</li>
+        <li><b>📌 Type:</b> {{ plant.type }}</li>
+      </ul>
+    </div>
+  </div>
+
+<!-- PERSONALIZED CARE -->
+<div class="personalized">
+
+<h2>🌱 Personalized Plant Care</h2>
+<p>Upload your plant photo and select symptoms to get better care advice.</p>
+
+  <form action="/predict" method="POST" enctype="multipart/form-data" onsubmit="return validateCare()">
+
+    <input type="hidden" name="plant_name" value="{{ plant.name }}">
+    <input type="hidden" name="plant_id" value="{{ plant.id }}">
+
+    <div class="upload-box" onclick="document.getElementById('plantPhoto').click()">
+
+     <div class="upload-content" id="uploadContent">
+        <span class="upload-icon">📷</span>
+        <h4>Upload Plant Image</h4>
+        <p>Click or drag & drop a clear image of your plant</p>
+     </div>
+
+      <img id="previewImage" alt="Uploaded plant preview">
+
+      <input type="file" name="image" id="plantPhoto" accept="image/*" hidden>
+
+    </div>
+
+  <div class="symptoms">
+   
+
+    <label><input type="checkbox" name="symptoms" value="Yellow leaves"> Yellow leaves</label>
+    <label><input type="checkbox" name="symptoms" value="Brown spots"> Brown spots</label>
+    <label><input type="checkbox" name="symptoms" value="Drooping plant"> Drooping plant</label>
+    <label><input type="checkbox" name="symptoms" value="Leaf curling"> Leaf curling</label>
+    <label><input type="checkbox" name="symptoms" value="White powder on leaves"> White powder on leaves</label>
+    <label><input type="checkbox" name="symptoms" value="Black spots"> Black spots</label>
+    <label><input type="checkbox" name="symptoms" value="Holes in leaves"> Holes in leaves</label>
+    <label><input type="checkbox" name="symptoms" value="Leaves falling"> Leaves falling</label>
+    <label><input type="checkbox" name="symptoms" value="Pale or faded leaves"> Pale or faded leaves</label>
+    <label><input type="checkbox" name="symptoms" value="Burnt leaf edges"> Burnt leaf edges</label>
+    <label><input type="checkbox" name="symptoms" value="Normal"> Normal</label>
+    <label><input type="checkbox" name="symptoms" value="Green Leaves"> Green Leaves</label>
+
+  </div>
+
+  <div class="actions">
+
+    <button type="submit" class="btn btn-primary">
+      Get Care Tips
+    </button>
+
+    <button type="button" class="btn btn-outline" onclick="resetPersonalizedCare()">
+      Reload
+    </button>
+
+
+  </form>
+
+  <form method="POST" action="/add_plant">
+
+    <input type="hidden" name="plant_name" value="{{ plant.name }}">
+    <input type="hidden" name="plant_id" value="{{ plant.id }}">
+
+    <button type="submit" class="btn btn-outline">
+      Add to My Plants
+    </button>
+
+  </form>
+
+</div>
+
+{% if disease %}
+
+<div class="prediction-card">
+
+  <h2>🌿 Prediction Result</h2>
+
+  <div class="result-header">
+
+    <div class="result-box">
+      <span class="label">Detected Disease</span>
+      <h3>{{ disease }}</h3>
+    </div>
+
+    <div class="result-box">
+      <span class="label">Confidence</span>
+      <h3>{{ confidence }}%</h3>
+    </div>
+
+  </div>
+
+  <div class="care-section">
+
+    <h3>{{ care.title }}</h3>
+    <p class="care-desc">{{ care.description }}</p>
+
+    <!-- Symptoms -->
+    <div class="care-block">
+      <h4>🩺 Symptoms</h4>
+      <ul>
+        {% for s in care.symptoms %}
+        <li>{{ s }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- Causes -->
+    <div class="care-block">
+      <h4>⚠ Causes</h4>
+      <ul>
+        {% for c in care.causes %}
+        <li>{{ c }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- Treatment -->
+    <div class="care-block">
+      <h4>💊 Treatment</h4>
+      <ul>
+        {% for t in care.treatment %}
+        <li>{{ t }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- Prevention -->
+    <div class="care-block">
+      <h4>🛡 Prevention</h4>
+      <ul>
+        {% for p in care.prevention %}
+        <li>{{ p }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+  </div>
+
+</div>
+
+{% endif %}
+
+</div>
+
+<footer class="footer">
+  © 2026 GreenGuide · Built for plant lovers 🌿
+</footer>
+
+<!-- ================= AUTH MODALS ================= -->
+
+<!-- Overlay -->
+<div id="overlay" class="overlay" onclick="closeModal()" style="display:none;"></div>
+
+<!-- LOGIN FORM -->
+<div id="loginModal" class="auth-modal" style="display:none;">
+  <h2>Login</h2>
+
+  <form method="POST" action="/login">
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="password" name="password" placeholder="Password" required>
+
+    <button type="submit" class="btn-primary">Login</button>
+  </form>
+
+  <p>Don't have an account? 
+    <span onclick="switchToRegister()">Register</span>
+  </p>
+
+  <span class="close-btn" onclick="closeModal()">✖</span>
+</div>
+
+<!-- REGISTER FORM -->
+<div id="registerModal" class="auth-modal" style="display:none;">
+  <h2>Register</h2>
+
+  <form method="POST" action="/register">
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="password" name="password" placeholder="Password" required>
+
+    <button type="submit" class="btn-primary">Register</button>
+  </form>
+
+  <p>Already have an account? 
+    <span onclick="switchToLogin()">Login</span>
+  </p>
+
+  <span class="close-btn" onclick="closeModal()">✖</span>
+</div>
+
+
+<script>
+/* RANDOM IMAGE LOGIC 
+const images = [
+  "/static/img/p1.jpg",
+  "/static/img/p2.jpg",
+  "/static/img/p3.jpg",
+  "/static/img/p4.jpg",
+  "/static/img/p5.jpg",
+  "/static/img/p6.jpg",
+  "/static/img/p7.jpg",
+  "/static/img/p8.jpg"
+];
+
+document.getElementById("plantImg").src =
+  images[Math.floor(Math.random() * images.length)];
+
+/* VALIDATION*/ 
+document.addEventListener("DOMContentLoaded", function () {
+
+  const form = document.querySelector('form[action="/predict"]');
+
+  form.addEventListener("submit", function (e) {
+
+    const photo = document.getElementById("plantPhoto").files.length;
+    const checked = document.querySelectorAll(".symptoms input:checked").length;
+
+    if (photo === 0) {
+      alert("📷 Please upload a plant image.");
+      e.preventDefault();
+      return;
+    }
+
+    if (checked === 0) {
+      alert("🩺 Please select at least one symptom.");
+      e.preventDefault();
+      return;
+    }
+
+  });
+
+});
+
+/* LOGIN REQUIRED */
+function requireLogin() {
+  alert("🔐 Please login or register to add plants to your list.");
+}
+
+document.getElementById("plantPhoto").addEventListener("change", function () {
+  const file = this.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const img = document.getElementById("previewImage");
+    const content = document.getElementById("uploadContent");
+
+    img.src = e.target.result;
+    img.style.display = "block";
+    content.style.display = "none";
+  };
+  reader.readAsDataURL(file);
+});
+
+function resetPersonalizedCare() {
+  // Reset image preview
+  document.getElementById("previewImage").src = "";
+  document.getElementById("previewImage").style.display = "none";
+
+  // Show upload UI again (FIXED)
+  const content = document.getElementById("uploadContent");
+  content.style.display = "block";
+  content.style.textAlign = "center";
+
+  // Clear file input
+  document.getElementById("plantPhoto").value = "";
+
+  // Uncheck all symptoms
+  document.querySelectorAll(".symptoms input").forEach(cb => {
+    cb.checked = false;
+  });
+
+  alert("🔄 Ready for a fresh personalized check!");
+}
+
+/* ================= AUTH MODAL SCRIPT ================= */
+
+function openLogin() {
+  document.getElementById("loginModal").style.display = "block";
+  document.getElementById("overlay").style.display = "block";
+}
+
+function openRegister() {
+  document.getElementById("registerModal").style.display = "block";
+  document.getElementById("overlay").style.display = "block";
+}
+
+function closeModal() {
+  document.getElementById("loginModal").style.display = "none";
+  document.getElementById("registerModal").style.display = "none";
+  document.getElementById("overlay").style.display = "none";
+}
+
+function switchToRegister() {
+  document.getElementById("loginModal").style.display = "none";
+  document.getElementById("registerModal").style.display = "block";
+}
+
+function switchToLogin() {
+  document.getElementById("registerModal").style.display = "none";
+  document.getElementById("loginModal").style.display = "block";
+}
+</script>
+
+
+
+</body>
+</html>

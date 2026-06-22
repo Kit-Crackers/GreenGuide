@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GreenGuide</title>
+
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar">
+  <div class="logo"><b>🌿 GreenGuide</b></div>
+
+  <ul class="nav-links">
+    <li><a href="/"><i class='bx bx-home'></i> Home</a></li>
+    <li><a href="/about"><i class='bx bx-info-circle'></i> About</a></li>
+    <li><a href="/search"><i class='bx bx-search'></i> Search</a></li>
+    <li class="nav-dropdown">
+      {% if user %}
+    <!-- USER LOGGED IN -->
+      <div class="user-icon">
+      <a href="#" class="btn-nav">
+        <i class='bx bx-user-circle'></i> user
+      </a>
+      <div class="dropdown-menu">
+        <a href="/account">👤 My Account</a>
+        <a href="/logout">🚪 Logout</a>
+      </div>
+      </div>
+      {% else %}
+    <!-- NOT LOGGED IN -->
+      <div class="user-icon">
+      <a href="#" class="btn-nav">
+       <i class='bx bx-user'></i> Login / Register
+      </a>
+
+    <div class="dropdown-menu">
+      <a href="#" onclick="openRegister()">📝 New User</a>
+      <a href="#" onclick="openLogin()">🔐 Existing User</a>
+    </div>
+    </div>
+  {% endif %}
+</li>
+
+  </ul>
+</nav>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-container">
+      {% for category, message in messages %}
+        <div class="flash-message">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div class="hero-left">
+    <span class="badge">
+      <i class='bx bx-leaf'></i> Smart Plant Companion
+    </span>
+
+    <h1>
+      Understand.<br>
+      Care.<br>
+      <span>Grow Plants Better.</span>
+    </h1>
+
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="scrollToWhy()">
+        Start Exploring
+      </button>
+      <button class="btn-secondary" onclick="window.location.href='/search'">
+        Search a Plant
+      </button>
+    </div>
+  </div>
+
+  <div class="hero-image">
+  <img src="{{ url_for('static', filename='img/c.jpg') }}" alt="Plant">
+</div>
+
+</section>
+
+<!-- ================= WHY PLANTS ================= -->
+<section class="why" id="why-section">
+  <h2>Why Plants Matter 🌍</h2>
+  <p class="section-subtitle">
+    Plants are not decoration. They are life-support systems for the planet.
+  </p>
+
+  <div class="why-grid">
+    <div class="why-card">
+      <i class='bx bx-wind'></i>
+      <h3>Purify Air</h3>
+      <p>Plants absorb toxins and improve indoor air quality.</p>
+    </div>
+
+    <div class="why-card">
+      <i class='bx bx-brain'></i>
+      <h3>Mental Wellbeing</h3>
+      <p>Greenery reduces stress, anxiety, and improves focus.</p>
+    </div>
+
+    <div class="why-card">
+      <i class='bx bx-heart'></i>
+      <h3>Healthy Living</h3>
+      <p>Medicinal plants support natural wellness.</p>
+    </div>
+
+    <div class="why-card">
+      <i class='bx bx-globe'></i>
+      <h3>Environment</h3>
+      <p>Plants help fight climate change and protect biodiversity.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FEATURES ================= -->
+<section class="features">
+
+  <h2>What GreenGuide Helps You Do 🌱</h2>
+  <p class="section-subtitle">
+    Personalized plant care powered by data and intelligent analysis.
+  </p>
+
+  <div class="features-layout">
+
+    <!-- LEFT : 2 CARDS -->
+    <div class="feature-grid">
+
+      <div class="feature-card">
+        <i class='bx bx-search-alt'></i>
+        <h3>Search Any Plant</h3>
+        <p>
+          Find detailed care information including watering,
+          sunlight, soil type, and growth habits.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <i class='bx bx-health'></i>
+        <h3>Personalized Care Tips</h3>
+        <p>
+          Get customized care recommendations based on plant condition,
+          symptoms, and growth stage.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- RIGHT : IMAGE + BUTTON -->
+    <div class="features-image">
+      <img src="{{ url_for('static', filename='img/e.jpg') }}" alt="Plant care">
+
+      <button class="btn-primary image-btn" onclick="window.location.href='/search'">
+        Search Plants Now
+      </button>
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <p>© 2026 GreenGuide · Built for plant lovers 🌿</p>
+</footer>
+
+<!-- ================= AUTH MODALS ================= -->
+
+<!-- Overlay -->
+<div id="overlay" class="overlay" onclick="closeModal()" style="display:none;"></div>
+
+<!-- LOGIN FORM -->
+<div id="loginModal" class="auth-modal" style="display:none;">
+  <h2>Login</h2>
+
+  <form method="POST" action="/login">
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="password" name="password" placeholder="Password" required>
+
+    <button type="submit" class="btn-primary">Login</button>
+  </form>
+
+  <p>Don't have an account? 
+    <span onclick="switchToRegister()">Register</span>
+  </p>
+
+  <span class="close-btn" onclick="closeModal()">✖</span>
+</div>
+
+<!-- REGISTER FORM -->
+<div id="registerModal" class="auth-modal" style="display:none;">
+  <h2>Register</h2>
+
+  <form method="POST" action="/register">
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="password" name="password" placeholder="Password" required>
+
+    <button type="submit" class="btn-primary">Register</button>
+  </form>
+
+  <p>Already have an account? 
+    <span onclick="switchToLogin()">Login</span>
+  </p>
+
+  <span class="close-btn" onclick="closeModal()">✖</span>
+</div>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

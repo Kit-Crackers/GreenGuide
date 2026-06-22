@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Search Plants | GreenGuide</title>
+<!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #f4fbf6;
+  --primary: #184e77;
+  --accent: #52b69a;
+  --dark: #1b4332;
+  --light: #ffffff;
+  --muted: #6c8f7f;
+}
+
+/* RESET */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Georgia, 'Times New Roman', serif;
+  background: var(--bg);
+  color: var(--dark);
+  line-height: 1.6;
+
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ================= NAVBAR ================= */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 60px;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+}
+
+.logo {
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--dark);
+  font-weight: 600;
+  position: relative;
+}
+
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  bottom: -6px;
+  left: 0;
+  transition: 0.3s;
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+.btn-nav {
+  background: var(--dark);
+  color: white !important;
+  padding: 10px 22px;
+  border-radius: 30px;
+  font-size: 14px;
+}
+
+.nav-dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+  min-width: 180px;
+  display: none;
+  overflow: hidden;
+  z-index: 200;
+}
+
+.nav-dropdown {
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 14px 18px;
+  text-decoration: none;
+  color: var(--dark);
+  font-weight: 600;
+}
+
+.dropdown-menu a:hover {
+  background: #e9f5ec;
+}
+
+.nav-dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.nav-dropdown {
+  position: relative;
+}
+
+.user-icon {
+  position: relative;
+  display: inline-block;
+}
+
+.user-icon .dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;  /* just below the icon */
+  left: 0;
+  background: white;
+  border: 1px solid #ccc;
+  min-width: 150px;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.user-icon .dropdown-menu a {
+  display: block;
+  padding: 8px 12px;
+  color: #333;
+  text-decoration: none;
+}
+
+.user-icon .dropdown-menu a:hover {
+  background-color: #f0f0f0;
+}
+
+/* Show dropdown on hover (desktop) */
+.user-icon:hover .dropdown-menu {
+  display: block;
+}
+
+/* Optional: add a smooth fade */
+.user-icon .dropdown-menu {
+  transition: opacity 0.2s ease;
+}
+
+/* ================= SEARCH HERO ================= */
+.page {
+  flex: 1;
+}
+
+.search-hero {
+  min-height: 80vh;
+  background: linear-gradient(
+    135deg,
+    #f4fbf6 0%,
+    #e9f5ec 40%,
+    #d8f3dc 100%
+  );
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 120px 20px 80px;
+  position: relative;
+}
+
+.search-hero::before,
+.search-hero::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.4;
+}
+
+.search-hero::before {
+  width: 320px;
+  height: 320px;
+  background: var(--accent);
+  top: -100px;
+  left: -100px;
+}
+
+.search-hero::after {
+  width: 280px;
+  height: 280px;
+  background: #95d5b2;
+  bottom: -80px;
+  right: -80px;
+}
+
+.hero-content {
+  text-align: center;
+  max-width: 720px;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-content h1 {
+  font-size: 46px;
+  font-weight: 800;
+  margin-bottom: 18px;
+  letter-spacing: 0.6px;
+}
+
+.hero-content h1 span {
+  color: var(--primary);
+}
+
+.hero-subtext {
+  font-size: 17px;
+  color: var(--muted);
+  margin-bottom: 42px;
+}
+
+/* ================= SEARCH ================= */
+.search-container {
+  max-width: 520px;
+  margin: 0 auto;
+  position: relative;
+}
+
+#searchInput {
+  width: 100%;
+  padding: 18px 22px;
+  border-radius: 40px;
+  border: 2px solid var(--accent);
+  font-size: 17px;
+  outline: none;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+  transition: 0.3s;
+}
+
+#searchInput:focus {
+  box-shadow: 0 25px 60px rgba(0,0,0,0.12);
+}
+
+/* Suggestions */
+#suggestions {
+  position: relative;
+  margin-top: 15px;
+  width: 100%;
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.12);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.suggestion {
+  padding: 15px 20px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.suggestion:hover {
+  background: #e9f5ec;
+}
+
+/* ================= FOOTER ================= */
+.footer {
+  background: var(--dark);
+  color: white;
+  text-align: center;
+  padding: 35px;
+  font-size: 14px;
+}
+
+/* ================= AUTH MODALS ================= */
+
+/* DARK OVERLAY */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(6px);
+  z-index: 999;
+  display: none;
+}
+
+/* MODAL BOX */
+.auth-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  background: white;
+  padding: 40px 35px;
+  width: 360px;
+  border-radius: 22px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+  z-index: 1000;
+  display: none;
+  animation: popupFade 0.3s ease forwards;
+}
+
+/* ANIMATION */
+@keyframes popupFade {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -60%) scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* TITLE */
+.auth-modal h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 26px;
+}
+
+/* INPUTS */
+.auth-modal input {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 15px;
+  border-radius: 12px;
+  border: 1px solid #dce9e3;
+  font-size: 14px;
+  outline: none;
+  transition: 0.25s;
+}
+
+.auth-modal input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(82,182,154,0.2);
+}
+
+/* BUTTON */
+.auth-modal button {
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* TEXT BELOW FORM */
+.auth-modal p {
+  text-align: center;
+  font-size: 14px;
+  margin-top: 15px;
+  color: var(--muted);
+}
+
+.auth-modal span {
+  color: var(--primary);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.auth-modal span:hover {
+  text-decoration: underline;
+}
+
+/* CLOSE BUTTON */
+.close-btn {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  font-size: 18px;
+  cursor: pointer;
+  color: var(--muted);
+  transition: 0.2s;
+}
+
+.close-btn:hover {
+  color: var(--dark);
+}
+
+/* PRIMARY BUTTON */
+.btn-primary {
+  background: var(--dark);
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-primary:hover {
+  background: var(--primary);
+  transform: translateY(-1px);
+}
+
+/* FLASH MESSAGE */
+.flash-container {
+  position: fixed;
+  top: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+}
+
+.flash-message {
+  background: #ff6b6b;
+  color: white;
+  padding: 12px 25px;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  animation: fadeOut 3s forwards;
+}
+
+@keyframes fadeOut {
+  0% {opacity: 1;}
+  80% {opacity: 1;}
+  100% {opacity: 0; transform: translateY(-10px);}
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="logo">🌿 GreenGuide</div>
+
+  <ul class="nav-links">
+    <li><a href="/"><i class='bx bx-home'></i> Home</a></li>
+    <li><a href="/about"><i class='bx bx-info-circle'></i> About</a></li>
+    <li><a href="/search"><i class='bx bx-search'></i> Search</a></li>
+     <li class="nav-dropdown">
+      {% if user %}
+    <!-- USER LOGGED IN -->
+      <div class="user-icon">
+      <a href="#" class="btn-nav">
+        <i class='bx bx-user-circle'></i> user
+      </a>
+      <div class="dropdown-menu">
+        <a href="/account">👤 My Account</a>
+        <a href="/logout">🚪 Logout</a>
+      </div>
+      </div>
+      {% else %}
+    <!-- NOT LOGGED IN -->
+      <div class="user-icon">
+      <a href="#" class="btn-nav">
+       <i class='bx bx-user'></i> Login / Register
+      </a>
+
+    <div class="dropdown-menu">
+      <a href="#" onclick="openRegister()">📝 New User</a>
+      <a href="#" onclick="openLogin()">🔐 Existing User</a>
+    </div>
+    </div>
+  {% endif %}
+</li>
+
+  </ul>
+</nav>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-container">
+      {% for category, message in messages %}
+        <div class="flash-message">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<!-- SEARCH HERO -->
+<div class="page">
+<section class="search-hero">
+  <div class="hero-content">
+
+    <h1>
+      Find the perfect care<br>
+      for your <span>plants</span>
+    </h1>
+
+    <p class="hero-subtext">
+      Type a plant name and get instant guidance on sunlight, watering, soil, and fertilization.
+    </p>
+
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="Search plants..." autocomplete="off">
+      <div id="suggestions"></div>
+    </div>
+
+  </div>
+</section>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <p>© 2026 GreenGuide · Built for plant lovers 🌿</p>
+</footer>
+
+<!-- ================= AUTH MODALS ================= -->
+
+<!-- Overlay -->
+<div id="overlay" class="overlay" onclick="closeModal()" style="display:none;"></div>
+
+<!-- LOGIN FORM -->
+<div id="loginModal" class="auth-modal" style="display:none;">
+  <h2>Login</h2>
+
+  <form method="POST" action="/login">
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="password" name="password" placeholder="Password" required>
+
+    <button type="submit" class="btn-primary">Login</button>
+  </form>
+
+  <p>Don't have an account? 
+    <span onclick="switchToRegister()">Register</span>
+  </p>
+
+  <span class="close-btn" onclick="closeModal()">✖</span>
+</div>
+
+<!-- REGISTER FORM -->
+<div id="registerModal" class="auth-modal" style="display:none;">
+  <h2>Register</h2>
+
+  <form method="POST" action="/register">
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="password" name="password" placeholder="Password" required>
+
+    <button type="submit" class="btn-primary">Register</button>
+  </form>
+
+  <p>Already have an account? 
+    <span onclick="switchToLogin()">Login</span>
+  </p>
+
+  <span class="close-btn" onclick="closeModal()">✖</span>
+</div>
+
+<script>
+const input = document.getElementById("searchInput");
+const suggestions = document.getElementById("suggestions");
+
+input.addEventListener("input", async () => {
+  const q = input.value.trim();
+  if (!q) {
+    suggestions.innerHTML = "";
+    return;
+  }
+
+  const res = await fetch(`/api/search?q=${q}`);
+  const data = await res.json();
+
+  suggestions.innerHTML = data.map(
+    name => `<div class="suggestion" onclick="goToPlant('${name}')">${name}</div>`
+  ).join("");
+});
+
+function goToPlant(name) {
+  window.location.href = `/plant/${name}`;
+}
+
+/* ================= AUTH MODAL SCRIPT ================= */
+
+function openLogin() {
+  document.getElementById("loginModal").style.display = "block";
+  document.getElementById("overlay").style.display = "block";
+}
+
+function openRegister() {
+  document.getElementById("registerModal").style.display = "block";
+  document.getElementById("overlay").style.display = "block";
+}
+
+function closeModal() {
+  document.getElementById("loginModal").style.display = "none";
+  document.getElementById("registerModal").style.display = "none";
+  document.getElementById("overlay").style.display = "none";
+}
+
+function switchToRegister() {
+  document.getElementById("loginModal").style.display = "none";
+  document.getElementById("registerModal").style.display = "block";
+}
+
+function switchToLogin() {
+  document.getElementById("registerModal").style.display = "none";
+  document.getElementById("loginModal").style.display = "block";
+}
+</script>
+
+</body>
+</html>

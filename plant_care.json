@@ -1,0 +1,168 @@
+{
+  "healthy": {
+    "title": "Healthy Plant",
+    "description": "Your plant looks healthy and is growing well.",
+    "symptoms": [
+      "green leaves",
+      "no spots",
+      "normal growth"
+    ],
+    "causes": [
+      "proper watering",
+      "adequate sunlight",
+      "good care routine"
+    ],
+      "treatment": [
+      "Continue your current care routine as the plant is healthy.",
+      "Water only when the top 1 to 2 inches of soil feel dry to avoid overwatering.",
+      "Clean leaves gently with a damp cloth to remove dust and improve photosynthesis.",
+      "Inspect the plant weekly for early signs of pests or disease."
+    ],
+    "prevention": [
+      "maintain watering schedule",
+      "provide proper sunlight",
+      "clean leaves occasionally"
+    ]
+  },
+
+  "leafspot": {
+    "title": "Leaf Spot Disease",
+    "description": "Dark or brown spots appearing on leaves, often caused by bacteria or fungi.",
+    "symptoms": [
+      "brown or black spots",
+      "yellow halos around spots",
+      "dry patches on leaves",
+      "spots spreading over time"
+    ],
+    "causes": [
+      "fungal or bacterial infection",
+      "overwatering",
+      "wet leaves for long time"
+    ],
+    "treatment": [
+        "Carefully remove and dispose of all infected leaves using clean scissors to stop the spread.",
+        "Avoid watering from above; always water directly at the soil level to keep leaves dry.",
+        "Apply a mild fungicide or neem oil spray every 7 to 10 days until symptoms reduce.",
+        "Ensure good airflow around the plant by spacing it properly or moving it to a ventilated area.",
+        "Disinfect gardening tools after use to prevent spreading the infection to other plants."
+      ],
+    "prevention": [
+      "water at soil level",
+      "keep leaves dry",
+      "ensure proper spacing between plants"
+    ]
+  },
+
+  "blight": {
+    "title": "Blight Disease",
+    "description": "Rapid browning and death of plant tissues, often spreading quickly.",
+    "symptoms": [
+      "large brown patches",
+      "burnt leaf appearance",
+      "wilting leaves",
+      "rapid leaf damage"
+    ],
+    "causes": [
+      "fungal infection",
+      "high humidity",
+      "poor airflow"
+    ],
+    "treatment": [
+      "Immediately prune and remove all affected parts of the plant to prevent rapid spread.",
+      "Apply a strong fungicide suitable for blight diseases, following instructions carefully.",
+      "Reduce watering frequency and ensure the soil is well-draining to avoid excess moisture.",
+      "Move the plant to a location with better airflow and moderate sunlight.",
+      "Avoid touching healthy plants after handling infected ones without washing hands or tools."
+    ],
+    "prevention": [
+      "avoid overcrowding plants",
+      "water early in the day",
+      "use well-draining soil"
+    ]
+  },
+
+  "powderymildew": {
+    "title": "Powdery Mildew",
+    "description": "White powdery coating on leaves caused by fungal infection.",
+    "symptoms": [
+      "white powder on leaves",
+      "dusty coating",
+      "leaf curling",
+      "distorted growth"
+    ],
+    "causes": [
+      "fungal spores",
+      "high humidity",
+      "low airflow"
+    ],
+      "treatment": [
+      "Gently wipe off the white powder from leaves using a soft cloth or tissue.",
+      "Spray neem oil or a baking soda solution (1 tsp baking soda + 1 liter water) every 5 to 7 days.",
+      "Place the plant in a brighter area with indirect sunlight to slow fungal growth.",
+      "Increase air circulation by keeping space between plants or using a fan indoors.",
+      "Remove heavily infected leaves if the infection is widespread."
+    ],
+    
+    "prevention": [
+      "maintain airflow",
+      "avoid overcrowding",
+      "keep humidity low"
+    ]
+  },
+
+  "rust": {
+    "title": "Rust Disease",
+    "description": "Orange or yellow powdery spots on leaves caused by fungal infection.",
+    "symptoms": [
+      "orange or yellow spots",
+      "powdery patches under leaves",
+      "leaf yellowing",
+      "early leaf drop"
+    ],
+    "causes": [
+      "fungal infection",
+      "moist conditions",
+      "poor air circulation"
+    ],
+    "treatment": [
+      "Remove and discard infected leaves showing orange or yellow powdery spots.",
+      "Avoid misting or wetting the leaves, as moisture promotes fungal growth.",
+      "Apply a fungicide or neem oil spray every 7 days until the condition improves.",
+      "Keep the plant in a well-ventilated area with good airflow.",
+      "Regularly check nearby plants and isolate the infected plant to prevent spreading."
+    ],
+    "prevention": [
+      "water at base of plant",
+      "ensure good ventilation",
+      "inspect plants regularly"
+    ]
+  },
+
+  "unknown":{
+    "title": "Condition Not Detected",
+    "description": "System is not able to detect condition for now. Follow normal plant care routine.",
+    "symptoms": [
+      "condition unclear",
+      "disease not detected",
+      "normal observation required"
+    ],
+    "causes": [
+      "unclear plant condition",
+      "early stage symptoms",
+      "insufficient visual information"
+    ],
+    "treatment": [
+      "Water the plant only when the top soil feels dry.",
+      "Provide adequate sunlight based on plant type.",
+      "Ensure proper air circulation around the plant.",
+      "Remove dry or damaged leaves regularly.",
+      "Monitor plant condition for a few days."
+    ],
+    "prevention": [
+      "maintain regular watering",
+      "provide proper sunlight",
+      "check plant weekly",
+      "keep leaves clean"
+    ]
+  }
+}
